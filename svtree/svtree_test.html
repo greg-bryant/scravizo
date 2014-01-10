@@ -1,0 +1,67 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="../common/jquery.jstree.js"></script>
+	<script type="text/javascript" src="svtree.js"></script>
+
+	<!-- INITIALIZE THE SVLIST OBJECT-->
+	<script>
+
+		var svtree = null; // SVLIST GLOBAL OBJECT...
+
+		function tree_click(obj, path, data)
+		{
+			alert('click->' + path + ' ' + data);
+		}
+
+		function my_onload()
+		{
+			svtree = new SVTree( {
+						'div_tree':'basicTree', 
+						'click': tree_click,
+					     } );
+
+			svtree.AddPaths( [['yo','hi','lo2',[1,1]],['yo','hi','lo',[2,2]]] );
+
+			var parent = document.getElementById('basicTree');
+			els = parent.getElementsByTagName("a");
+			for (i=0; i< els.length; i++ )
+			{
+				var el = els[i];
+				el.setAttribute("style","color:#FFFF00;");
+			}
+	
+			for (i=0; i<document.styleSheets.length; i++)
+			{
+				var ss = document.styleSheets[i];
+				console.log( ss );
+			}
+		}
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<style type="text/css">
+	#basicTree {
+		position: absolute;
+		width: 500px;
+		height: 200px;
+		left: 0px;
+		top: 0px;
+		margin: 0;
+		background-color:green;
+                   }
+</style>
+
+<div id='basicTree'>
+</div>
+
+</body>
+
+</html>

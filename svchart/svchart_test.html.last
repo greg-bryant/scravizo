@@ -1,0 +1,54 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="test/javascript" src="../common/highcharts/js/highcharts.js"></script>
+	<script type="test/javascript" src="../common/highcharts/js/modules/exporting.js"></script>
+	<script type="text/javascript" src="svchart.js"></script>
+
+	<!-- INITIALIZE THE SVLIST OBJECT-->
+	<script>
+
+		var svchart = null; // SVCHART GLOBAL OBJECT...
+
+                svchart = new SVChart( {
+                                                'div_chart':'basicChart',
+                                             } );
+		alert(svchart);
+
+		function my_onload()
+		{
+			/*
+			svchart = new SVChart( {
+						'div_chart':'basicChart', 
+					     } );
+			*/
+
+			svchart.AddItems( [ "this is a", "line of text", "and so is this one!" ], 1);
+		}
+
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<style type="text/css">
+	#basicChart {
+		position: absolute;
+		width: 500px;
+		height: 200px;
+		left: 100px;
+		top: 100px;
+		margin: 0;
+		background-color:green;
+                   }
+</style>
+
+<div id='basicChart'>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<html>
+<head>
+
+        <link rel="stylesheet" href="../common/gantt/css/style.css" />
+
+	<!-- LOAD JS LIBRARIES -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+	<script type="text/javascript" src="svgant.js"></script>
+
+	<!-- INITIALIZE THE SVLIST OBJECT-->
+	<script>
+
+		var svgant = null; // SVGANT GLOBAL OBJECT...
+
+		function my_onload()
+		{
+			alert('myload');
+			svgant = new SVGant( {
+						'div_gantt':'basicGantt'
+					     } );
+			alert('doneload');
+		}
+
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script src="../common/gantt/js/jquery.fn.gantt.js"></script>
+
+
+<style type="text/css">
+	#basicGantt {
+		position: absolute;
+		width: 500px;
+		height: 200px;
+		left: 100px;
+		top: 100px;
+		margin: 0;
+		background-color:green;
+		overflow-y:scroll;
+		font-family:"Times New Roman", Times, serif;
+		font-size:50px;
+	}
+               #basicGantt::-webkit-scrollbar {
+               background: #5d5d5d;
+               }
+               #basicGantt::-webkit-scrollbar-track {
+                 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                 border-radius: 10px;
+               }
+               #basicGantt::-webkit-scrollbar-thumb {
+                 border-radius: 10px;
+                 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+                 background: #4d4d4d
+               }
+               #basicGantt::-webkit-scrollbar-corner {
+                 background: #5d5d5d;
+               }
+</style>
+
+<div class='basicGantt'>
+</div>
+
+</body>
+
+</html>

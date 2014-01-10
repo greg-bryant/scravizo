@@ -1,0 +1,82 @@
+<html>
+<head>
+
+	<!-- Ensure EI8 Standards Mode Emulation -->
+	<meta http-equiv="X-UA-Compatible" content="IE=8" >
+
+	<!----------------------->
+	<!-- LOAD JS LIBRARIES -->
+	<!----------------------->
+
+	<!-- STYLE, CSS -->
+        <style type="text/css" title="currentStyle">
+                        @import "common/datatables/datatable.css";
+        </style>
+
+        <link rel="stylesheet" href="common/gantt/css/style.css" />
+
+	<!-- JQUERY -->
+        <script type="text/javascript" src="common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="common/jquery.jstree.js"></script>
+        <script type="text/javascript" src="common/datatables/jquery.dataTables.js"></script>
+
+	<!-- SVCOMMON -->
+	<script type="text/javascript" src="svcommon/svcommon.js"></script>
+
+	<!-- SVLIST -->
+	<script type="text/javascript" src="svlist/svlist.js"></script>
+
+	<!-- SVGIS -->	
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="svgis/svgis.js"></script>
+
+	<!-- SVTREE -->
+	<script type="text/javascript" src="svtree/svtree.js"></script>
+
+	<!-- SVCHART -->
+	<script type="test/javascript" src="common/highcharts/js/highcharts.js"></script>
+	<script type="test/javascript" src="common/highcharts/js/modules/exporting.js"></script>
+	<script type="text/javascript" src="svchart/svchart.js"></script>
+
+	<!-- SVCONTROL -->
+	<script type="text/javascript" src="svcontrol/svcontrol.js"></script>
+
+	<!-- SVCOMM-->
+	<script type="text/javascript" src="svcomm/svcomm.js"></script>
+	
+	<!-- SVADMIN-->
+	<script type="text/javascript" src="svadmin/svadmin.js"></script>
+	
+	<!-- SVTABLE-->
+	<script type="text/javascript" src="svtable/svtable.js"></script>
+
+	<!-- SVGANT-->
+	<script type="text/javascript" src="svgantt/svgantt.js"></script>
+
+	<!-- SVFACTORY-->
+	<script type="text/javascript" src="svfactory/svfactory.js"></script>
+	
+	<!-- INITIALIZE THE SV FACTORY OBJECT-->
+	<script>
+                function my_onload()
+                {
+                        svfactory = new SVFactory(  
+						   {
+							'url': '/HTTP_Inbound'
+                                                   } );
+                        svfactory.Init();
+                }
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<script src="common/highcharts/js/highcharts.js"></script>
+<script src="common/highcharts/js/modules/exporting.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,376 @@
+<html>
+<head>
+
+	<!-- Ensure EI8 Standards Mode Emulation -->
+	<meta http-equiv="X-UA-Compatible" content="IE=8" >
+
+	<!----------------------->
+	<!-- LOAD JS LIBRARIES -->
+	<!----------------------->
+
+	<!-- STYLE, CSS -->
+        <style type="text/css" title="currentStyle">
+                        @import "common/datatables/datatable.css";
+        </style>
+
+        <link rel="stylesheet" href="common/gantt/css/style.css" />
+
+	<!-- JQUERY -->
+        <script type="text/javascript" src="common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="common/jquery.jstree.js"></script>
+        <script type="text/javascript" src="common/datatables/jquery.dataTables.js"></script>
+
+	<!-- SVCOMMON -->
+	<script type="text/javascript" src="svcommon/svcommon.js"></script>
+
+	<!-- SVLIST -->
+	<script type="text/javascript" src="svlist/svlist.js"></script>
+
+	<!-- SVGIS -->	
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="svgis/svgis.js"></script>
+
+	<!-- SVTREE -->
+	<script type="text/javascript" src="svtree/svtree.js"></script>
+
+	<!-- SVCHART -->
+	<script type="test/javascript" src="common/highcharts/js/highcharts.js"></script>
+	<script type="test/javascript" src="common/highcharts/js/modules/exporting.js"></script>
+	<script type="text/javascript" src="svchart/svchart.js"></script>
+
+	<!-- SVCONTROL -->
+	<script type="text/javascript" src="svcontrol/svcontrol.js"></script>
+
+	<!-- SVCOMM-->
+	<script type="text/javascript" src="svcomm/svcomm.js"></script>
+	
+	<!-- SVADMIN-->
+	<script type="text/javascript" src="svadmin/svadmin.js"></script>
+	
+	<!-- SVTABLE-->
+	<script type="text/javascript" src="svtable/svtable.js"></script>
+	
+	<!-- SVGANT-->
+	<script type="text/javascript" src="svgantt/svgantt.js"></script>
+
+	<!-- SVFACTORY-->
+	<script type="text/javascript" src="svfactory/svfactory.js"></script>
+
+	<!-- INITIALIZE THE SV FACTORY OBJECT-->
+	<script>
+
+
+		var controls_loaded = false;
+		var charts_loaded = false;
+		var lists_loaded = false;
+		var maps_loaded = true;
+		var trees_loaded = true;
+		var tables_loaded = false;
+		var gantts_loaded = false;
+		
+		var body_loaded = false;
+
+		var main_init_done = false;
+		var admin_done = false;
+		var admin_count = 0;
+
+		var SOURCES = [];
+
+		var first_time = true;
+
+
+		function check_all_loaded()
+		{
+
+			if ( tables_loaded && maps_loaded && trees_loaded && 
+				lists_loaded && controls_loaded && charts_loaded && gantts_loaded && body_loaded )
+				return true;
+			else
+				return false;
+		}
+
+                function init()
+                {
+
+			var true_init = false;
+
+			if ( check_all_loaded() )
+			{
+				true_init = true;
+			}
+
+			if (true_init)
+			{
+                        	svfactory = new SVFactory(  
+						   {
+							'url': null, //'http://localhost:8080',
+							'cb_fake': comm_fake
+                                                   } );
+
+                        	svfactory.Init();
+			}
+                }
+
+		function TEST_INFO(msg)
+		{
+			console.log("TEST INFO: " + msg);
+		}
+
+		function TEST_FAIL(msg)
+		{
+			var str = "TEST FAIL: " + msg;
+			if ( msg.indexOf("Info")<0 )
+			{
+				alert(str);
+				console.log(str);
+			}
+			else
+			{
+
+			}
+		}
+
+		function get_next_init()
+		{
+
+			//	iterate sources and find an init, or else done...
+			for ( var i=0;i<SOURCES.length;i++ )
+			{
+				var item = SOURCES[i]['peek'](); // check it...
+				if (item==false) continue; // no more items in this source...
+				var str = item[0]; // get the item type...
+				if (str=="init") 
+				{
+					var item = SOURCES[i]['next'](); // pop it...
+					return item[2]; // return the init str...
+				}
+			}
+
+			//	got here, means no more inits in any sources...
+			return false;
+		}
+
+                function get_next_data(name)
+                {
+                        //      iterate sources and find an init, or else done...
+                        for ( var i=0;i<SOURCES.length;i++ )
+                        {
+                                var item = SOURCES[i]['peek'](); // check it...
+				
+                                if (item==false) continue; // no more items in this source...
+				var str = item[0]; // get the item type...
+				var iname = item[1]; // get the item name...
+                                if ((str=="data")&&(iname==name))
+				{
+					var item = SOURCES[i]['next'](); // pop it...
+					var func = item[2];
+					var retv = func();
+					if (retv==false) // this data source is done...
+					{
+						TEST_INFO("This data source is done");
+						break;
+					}
+					else if (retv==null)
+					{
+						TEST_FAIL("Invalid data for object");
+					}
+					var dstr = retv;	
+					return dstr;
+				}
+                        }
+
+                        //      got here, means no more inits in any sources...
+                        return false;
+                }
+
+		function get_next_admin()
+		{
+			return false;
+		}
+	
+                function comm_fake( url )
+                {
+
+			if ( url == "main_init" )
+                        {		
+				TEST_INFO("got main_init");
+                                return "{ type:'page', title:'PAGE TITLE', start:'1', level:'7', report:'7' }";
+                        }
+                        else if ( url == "main_init_next")
+                        {
+				TEST_INFO("got main_init_next");
+				if ( main_init_done ) 
+				{
+					TEST_FAIL( "main_init_next unexpected" );
+				}
+				else
+				{
+					var initstr = get_next_init();
+					if ( initstr == false )  // no more test items...
+					{
+						main_init_done = true;
+						TEST_INFO("return done in main_init_next stream...");
+						return "done";
+					}
+					else		
+					{	
+						return initstr;
+					}
+				}
+                        }
+			else if ( url == "admin" )
+			{
+
+				TEST_INFO("got admin");
+				admin_count++;
+				
+				if ( admin_done ) 
+				{
+					TEST_FAIL( "admin unexpected" );
+				}
+				else if (admin_count==1)
+				{
+					return "{ report:'7', level:'7' }";
+				}
+				else
+				{	
+					admin_done = true;
+					return "done";
+				}
+			}
+			else if ( url.indexOf("chart_data") >= 0 )
+			{
+				TEST_INFO("got chart data request->" + url );
+				var chname = url.substring( url.indexOf("=")+1 ); // get the chart name...
+				var datastr = get_next_data( chname );  // get data for this chart if available...
+				if ( datastr == false )
+				{
+					TEST_INFO("no data yet for chart");		
+					return "wait";
+				}
+				else
+				{
+					TEST_INFO("returning data to chart->" + datastr);
+					if ( chname == "chart6" )
+					{
+						TEST_INFO("chart6 data->" + datastr);
+					}
+					return datastr;
+				}
+			}
+			else if ( url.indexOf("list_data") >= 0 )
+			{
+                                TEST_INFO("got list data request->" + url );
+                                var lname = url.substring( url.indexOf("=")+1 ); // get the list name...
+                                var datastr = get_next_data( lname );  // get data for this list if available...
+                                if ( datastr == false )
+                                {
+                                        TEST_INFO("no data yet for list");
+                                        return "wait";
+                                }
+                                else
+                                {
+                                        TEST_INFO("return data to list");
+                                        return datastr;
+                                }
+                        }
+                        else if ( url.indexOf("map_data") >= 0 )
+                        {
+                                TEST_INFO("got map data request->" + url );
+                                var mname = url.substring( url.indexOf("=")+1 ); // get the map name...
+                                var datastr = get_next_data( mname );  // get data for this map if available...
+                                if ( datastr == false )
+                                {
+                                        TEST_INFO("no data yet for map");
+                                        return "wait";
+                                }
+                                else
+                                {
+                                        TEST_INFO("return data to map");
+                                        return datastr;
+                                }
+                        }
+                        else if ( url.indexOf("tree_data") >= 0 )
+                        {
+                                TEST_INFO("got tree data request->" + url );
+                                var tname = url.substring( url.indexOf("=")+1 ); // get the tree name...
+                                var datastr = get_next_data( tname );  // get data for this tree if available...
+                                if ( datastr == false )
+                                {
+                                        TEST_INFO("no data yet for tree");
+                                        return "wait";
+                                }
+                                else
+                                {
+                                        TEST_INFO("return data to tree");
+                                        return datastr;
+                                }
+                        }
+                        else if ( url.indexOf("table_data") >= 0 )
+                        {
+                                TEST_INFO("got table data request->" + url );
+                                var tname = url.substring( url.indexOf("=")+1 ); // get the table name...
+                                var datastr = get_next_data( tname );  // get data for this table if available...
+                                if ( datastr == false )
+                                {
+                                        TEST_INFO("no data yet for table");
+                                        return "wait";
+                                }
+                                else
+                                {
+                                        TEST_INFO("return data to table");
+                                        return datastr;
+                                }
+                        }
+			else if ( url.indexOf("gantt_data") >= 0 )
+                        {
+                                TEST_INFO("got gantt data request->" + url );
+                                var tname = url.substring( url.indexOf("=")+1 ); // get the gantt name...
+                                var datastr = get_next_data( tname );  // get data for this gantt if available...
+                                if ( datastr == false )
+                                {
+                                        TEST_INFO("no data yet for gantt");
+                                        return "wait";
+                                }
+                                else
+                                {
+                                        TEST_INFO("return data to gantt");
+                                        return datastr;
+                                }
+                        }
+			else if ( url.indexOf("user_action") >= 0 )
+			{
+				alert( url );
+			}
+			else
+			{
+				TEST_FAIL( "unexpected url->" + url );	
+			}	
+		}
+
+	
+		importJS( "charts.js", "_CHARTSJS", function() { charts_loaded = true; charts_script_init(); init(); } );
+		importJS( "controls.js", "_CONTROLSJS", function() { controls_loaded = true; controls_script_init(); init(); } );
+		importJS( "lists.js", "_LISTSJS", function() { lists_loaded = true; lists_script_init(); init(); } );
+		//importJS( "maps.js", "_MAPSJS", function() { maps_loaded = true; maps_script_init(); init(); } );
+		//importJS( "trees.js", "_TREESJS", function() { trees_loaded = true; trees_script_init(); init(); } );
+		importJS( "tables.js", "_TABLESJS", function() { tables_loaded = true; tables_script_init(); init(); } );
+		importJS( "gantts.js", "_GANTTSJS", function() { gantts_loaded = true; gantts_script_init(); init(); } );
+
+
+	 </script>
+
+</head>
+
+<body onload="body_loaded=true;init();" >
+
+<script src="common/highcharts/js/highcharts.js"></script>
+<script src="common/highcharts/js/modules/exporting.js"></script>
+
+<script src="common/gantt/js/jquery.fn.gantt.js"></script>
+
+</body>
+
+</html>
