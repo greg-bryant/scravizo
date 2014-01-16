@@ -1,0 +1,146 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="../common/jquery.jstree.js"></script>
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="../svlist/svlist.js"></script>
+	<script type="text/javascript" src="../svcomm/svcomm.js"></script>
+
+	<!-- INITIALIZE THE SVLIST OBJECT-->
+	<script>
+
+		//	
+		//	SV objects...
+		//
+		var svobjs = {}; // SV OBJECTS...
+		var svcomm = null; // SVCOMM GLOBAL OBJECT...
+
+		function _adjustdiv( obj )
+		{
+			var name = obj.name;
+			var div = document.getElementById( name );
+                        var x = obj.x;
+                        var y = obj.y;
+                        var width = obj.width;
+                        var height = obj.height;
+                        div.style.left = x;
+                        div.style.top = y;
+                        div.width = width;
+                        div.height = height;
+		}
+
+		function _listtimeout( name )
+		{
+			//alert('list timeout! ' + name );
+
+			// get the svlist object...
+			//alert(svobjs[name]);
+			svlist = svobjs[name]['ctl'];
+			//alert('svlist ' + svlist );
+
+			// make comm call to get list items...
+			var items = svcomm.SendListRequest( name );
+			//alert('items ' + items );
+
+			svlist.AddItems( items, true );
+			//alert('done');	
+		}
+
+		function _create( obj )
+		{
+			// get the obj name...
+			var name = obj.name;
+			//alert('create! ' + name);
+
+			// create a div w/style via DOM...
+			var div = document.createElement('div');
+			div.setAttribute('id',name);
+			div.setAttribute('style','position:absolute;left:0px;right:0px;width:100;height:100;background-color:green;');
+			document.body.appendChild(div);
+			_adjustdiv( obj );
+
+			// create the sv list...
+			svlist = new SVList( { 'div_list':name, } );
+			//alert('svlist create ' + svlist);
+			obj['ctl'] = svlist;
+
+			// create an anonymous timeout function to update this list...
+			var interval = obj.interval;
+			var str = "_listtimeout('" + name + "')";
+			//alert('call ' + str);
+			var cb_interval = setInterval( str, Number(interval) );
+			// save the cb ref...
+			obj['cb_ref'] = cb_interval
+
+			// save this item in global dct...
+			svobjs[ name ] = obj;
+
+			console.log( svobjs );
+		}
+
+		function _update( obj )
+		{
+			var name = obj.name;
+			//alert('update! ' + name);
+
+			// make any div adjustments...
+			_adjustdiv( obj );
+			
+			// TODO: support interval adjustments...
+
+			// update this item in the global dct...
+			obj['cb_ref'] = svobjs[ name ]['cb_ref'];	
+			obj['ctl'] = svobjs[name]['ctl'];
+			svobjs[ name ] = obj;
+		}
+
+		function comm_init( obj )
+                {
+			var name = obj.name;
+			//alert('comm init! ', name);
+			if ( svobjs.hasOwnProperty(name) )
+			{
+				_update( obj );
+			}
+			else
+			{
+				_create( obj );
+			}
+                }
+
+                function comm_error()
+                {
+                }
+
+                function my_onload()
+                {
+                        svcomm = new SVComm( {
+                                                'interval':100,
+                                                'cb_init': comm_init,
+                                                'cb_error': comm_error                  
+                                             } );
+                        svcomm.SendMainInit();
+                }
+
+		//	
+		//	Callback for a regularly called timer...
+		//
+		function my_timer()
+		{
+		}
+
+		//	Invoke timer...
+		setTimeout( "my_timer()", 500 );
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+</body>
+
+</html>

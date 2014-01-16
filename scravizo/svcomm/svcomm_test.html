@@ -1,0 +1,86 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+	<script type="text/javascript" src="svcomm.js"></script>
+
+	<!--
+        <script type="text/javascript" src="/site/common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="/site/common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/site/common/_lib/jquery.hotkeys.js"></script>
+	<script type="text/javascript" src="/site/svcomm/svcomm.js"></script>
+	-->
+
+	<!-- INITIALIZE THE SVLIST OBJECT-->
+	<script>
+
+		var svlist = null; // SVLIST GLOBAL OBJECT...
+
+		var init_count = 0;
+
+		function comm_init( inst, obj )
+		{
+			alert(inst);
+			alert(obj);
+			alert('success!');
+		}
+
+		function comm_error()
+		{
+			alert('error!');
+		}
+
+		function comm_fake( url )
+		{
+			if ( url == "main_init" )
+			{
+				init_count = 1;
+				return "{ name: 'list1', type:'list', x:'20', y:'100', height:'200', width:'50', interval:'1000'  }";
+			}
+			else if ( url == "main_init_next")
+			{
+				init_count++;
+				if (init_count==2)
+                			return "{ name: 'list2', type:'list', x:'400', y:'300', height:'200', width:'50', interval:'1000' }";
+				else
+					return "done";
+			}
+			else if ( url == "list_data&name=list1" )
+			{
+				return "[ 'list1','this is the stuff you print out', 'this too' ]";
+			}
+			else if ( url == "list_data&name=list2" )
+			{
+				return "[ 'list2', 'this is the stuff you print out', 'this too' ]";
+			}
+			else
+			{
+				alert("unknown web service call!");
+				return "";
+			}
+		}
+
+		function my_onload()
+		{
+			svcomm = new SVComm( {
+						'url':null, // 'http://localhost:8080',
+						'cb_init': comm_init,
+						'cb_obj': null,
+						'cb_error': comm_error,		
+						'cb_fake': comm_fake
+					     } );
+			svcomm.SendInitRequests();
+		}
+
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+</body>
+
+</html>

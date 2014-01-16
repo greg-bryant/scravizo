@@ -1,0 +1,69 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="../common/jquery.jstree.js"></script>
+	<script type="text/javascript" src="svlist.js"></script>
+
+	<!-- INITIALIZE THE SVLIST OBJECT-->
+	<script>
+
+		var svlist = null; // SVLIST GLOBAL OBJECT...
+
+		function my_onload()
+		{
+			svlist = new SVList( {
+						'div_list':'basicList',
+						'text_color':'#FF0000'
+					     } );
+			svlist.AddItems( [ "this is a", "line of text", "and so is this one!" ], false);
+			svlist.AddItems( [ "this is a", "line of text", "and so is this one!" ], false);
+			svlist.AddItems( [ "this is a", "line of text", "and so is this one!" ], false);
+			svlist.AddItems( [ "this is a", "line of text", "and so is this one!" ], false);
+		}
+
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<style type="text/css">
+	#basicList {
+		position: absolute;
+		width: 500px;
+		height: 200px;
+		left: 100px;
+		top: 100px;
+		margin: 0;
+		background-color:green;
+		overflow-y:scroll;
+		font-family:"Times New Roman", Times, serif;
+		font-size:50px;
+	}
+               #basicList::-webkit-scrollbar {
+               background: #5d5d5d;
+               }
+               #basicList::-webkit-scrollbar-track {
+                 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                 border-radius: 10px;
+               }
+               #basicList::-webkit-scrollbar-thumb {
+                 border-radius: 10px;
+                 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+                 background: #4d4d4d
+               }
+               #basicList::-webkit-scrollbar-corner {
+                 background: #5d5d5d;
+               }
+</style>
+
+<div id='basicList'>
+</div>
+
+</body>
+
+</html>

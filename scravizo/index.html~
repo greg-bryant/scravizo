@@ -1,0 +1,296 @@
+<html>
+<head>
+	<!----------------------->
+	<!-- LOAD JS LIBRARIES -->
+	<!----------------------->
+
+	<!-- JQUERY -->
+        <script type="text/javascript" src="common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="common/jquery.jstree.js"></script>
+
+	<!-- SVLIST -->
+	<script type="text/javascript" src="svlist/svlist.js"></script>
+
+	<!-- SVGIS -->	
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="svgis/svgis.js"></script>
+
+	<!-- SVTREE -->
+	<script type="text/javascript" src="svtree/svtree.js"></script>
+
+	<!-- SVCHART -->
+	<script type="test/javascript" src="common/highcharts/js/highcharts.js"></script>
+	<script type="test/javascript" src="common/highcharts/js/modules/exporting.js"></script>
+	<script type="text/javascript" src="svchart/svchart.js"></script>
+
+	<!-- SVCONTROL -->
+	<script type="text/javascript" src="svcontrol/svcontrol.js"></script>
+
+	<!-- SVCOMM-->
+	<script type="text/javascript" src="svcomm/svcomm.js"></script>
+	
+	<!-- SVADMIN-->
+	<script type="text/javascript" src="svadmin/svadmin.js"></script>
+
+	<!-- SVFACTORY-->
+	<script type="text/javascript" src="svfactory/svfactory.js"></script>
+	
+	<!-- INITIALIZE THE SV FACTORY OBJECT-->
+	<script>
+
+		var svfactory = null; // SVFACTORY GLOBAL OBJECT...
+		var cter = 0;
+		var mter = 0;
+		var init_count=0;
+		var send_chart_reset = 0;
+		var send_list_reset = 0;
+		var chart_inited = false;
+		var list_inited = false;
+		var mdcount = 0;
+
+		//
+		//	Stuff to do on document load event...
+		//
+                function my_onload()
+                {
+                        svfactory = new SVFactory(  
+						   {
+							'url': null, //'http://localhost:8080',
+							'cb_fake': comm_fake
+                                                   } );
+                        svfactory.Init();
+                }
+
+		//
+		//	This call will fake a web service endpoint...
+		//
+                function comm_fake( url )
+                {
+                        if ( url == "main_init" )
+                        {
+				init_count++;
+				if ( init_count==1 )
+				{
+					return "{ type:'page', title:'PAGE TITLE' }";
+				}
+				else
+				{
+					return "wait";
+				}
+                        }
+                        else if ( url == "main_init_next")
+                        {
+                                init_count++;
+				if ( init_count==2 )
+                                {
+					list_inited = true;
+                                        return "{ name: 'list2', type:'list', x:'20', y:'20', height:'200', width:'200', interval:'1000'," +
+                                                "scroll_or_refresh:'scroll'," +
+                                                "prepend_or_append:'prepend' }";
+						//"font:'sans-serif'," +
+						//"font_size:'20px'," +
+						//"text_color:'#FFFF00'," + 
+						//"background_color:'#FFFFFF' }";
+                                }
+				else if (init_count==4)	
+				{
+					return "{ name: 'list1', type:'list', x:'320', y:'20', height:'200', width:'200', interval:'1000'," +
+						"scroll_or_refresh:'refresh'," +
+						"prepend_or_append:'prepend' }";
+						//"font:'Times'," +
+                                                //"font_size:'10px'," +
+                                                //"text_color:'#00FFFF',"  + 
+                                                //"background_color: '#00FF00' }";
+				}
+				else if (init_count==6)
+				{
+					return "{ name: 'map1', type:'map', x:'300', y:'250', height:'300', width:'300', interval:'1000'," +
+						"tree: 'tree1'," +
+						"top:'52.54', bottom:'52.50', left:'13.39', right:'13.43' }";
+				}
+				else if (init_count==8)
+				{
+        				return "{ name: 'tree1', type:'tree', x:'40', y:'250', height:'200', width:'200', interval:'1000'," +
+						" paths: [ ['yo',[13.39,52.50,13.43,52.54]], " + 
+							"['yo','ho',[13.39,52.50,13.41,52.52] ], " +
+							"['yo','ho','a',[13.391,52.50,13.401,52.51] ]," + 
+							"['yo','ho','b',[13.392,52.50,13.402,52.51] ]," + 
+							"['yo','ho','c',[13.393,52.50,13.403,52.51] ]," + 
+							"['yo','ho','d',[13.394,52.50,13.404,52.51] ]," + 
+							"['yo','ho','e',[13.395,52.50,13.405,52.51] ]," + 
+							"['yo','ho','f',[13.396,52.50,13.406,52.51] ]," + 
+							"['yo','ho','g',[13.397,52.50,13.407,52.51] ]," + 
+							"['yo','ho','h',[13.398,52.50,13.408,52.51] ]," + 
+							"['yo','ho','i',[13.399,52.50,13.409,52.51] ]," + 
+							"['yo','ho','j',[13.3991,52.50,13.4091,52.51] ]," + 
+							"['yo','ho','k',[13.3992,52.50,13.4092,52.51] ]," + 
+							"['yo','ho','l',[13.3993,52.50,13.4093,52.51] ] ]}";
+						//"font:'sans-serif'," +
+                                                //"font_size:'20px'," +
+                                                //"text_color:'#FFFF00'," +
+						//"background_color: '#00FFFF' }";
+				}
+				else if (init_count==10)
+				{
+					return "{ name: 'my_control', type:'control', title:'the default title', x:'650', " + 
+						"y:'300', height:'200', width:'70', " +
+						"buttons:[{name:'run'},{name:'stop'}," + 
+						"{name:'pause',toggle_name:'resume'}," + 
+						"{name:'reset'},{name:'restart'},{name:'refresh'} ] }";
+				}
+				else if (init_count==11)
+				{
+					chart_inited = true;
+        				return "{ name: 'chart1', type:'chart', title:'My Title', " + 
+						"window_points:'10', " + 
+						"x:'580', y:'20', height:'200', width:'400', interval:'1000', " +
+						"points_or_lines_or_area:'area', " +
+						"series_name:['one','two'], chart_start:'fill', shift:'no'," +
+						"stacking:'no' }";
+				}
+                                else if (init_count>12)
+				{
+                                        return "done";
+				}
+				else
+				{
+					return "wait";
+				}
+                        }
+                        else if ( url == "list_data?name=list1" )
+                        {
+				var str = "counter->" + cter;
+				cter++;
+                                return "[ 'its list1','this is the stuff you print out', 'this too', '" + str + "' ]";
+                        }
+                        else if ( url == "list_data?name=list2" )
+                        {
+				var str = "counter->" + cter;
+				cter++;
+                                return "[ 'its list2', 'this is the stuff you print out', 'this too', '" + str + "' ]";
+                        }
+			else if ( url == "tree_data?name=tree1&init=1" )
+			{
+				return "done";
+			}
+			else if ( url == "map_data?name=map1&init=1" )
+			{
+				mter++;
+				if ( mter == 1 )
+				{
+					mdcount=1;
+					return "[" +
+                                		"{'color':'ff0000', 'transparency':'1.0'," +
+                                        	"'shape':'circle','border':'0px','border_color':'00ff00'," +
+                                        	"'size':'10px'," +
+                                        	"'lat':'13.41'," +
+                                        	"'long':'52.52' }," +
+                                		"{'color':'00ff00', 'transparency':'0.7'," +
+                                        	"'shape':'circle','border':'1px','border_color':'0000ff'," +
+                                        	"'size':'12px'," +
+                                        	"'lat':'13.4160'," +
+                                        	"'long':'52.52' }," +
+                                		"{'color':'0000ff', 'transparency':'0.6'," +
+                                        	"'shape':'square','border':'2px','border_color':'ff0000'," +
+                                        	"'size':'14px',"+
+                                        	"'lat':'13.4220',"+ 
+                                        	"'long':'52.52' },"+ 
+                                		"{'color':'ffff00', 'transparency':'0.4',"+
+                                        	"'shape':'square','border':'3px','border_color':'00ffff',"+
+                                        	"'size':'16px',"+
+                                        	"'lat':'13.4280',"+
+                                        	"'long':'52.52' } ]";
+
+						/*
+                                		"{'color':'ffff00', 'transparency':'1.0',"+
+                                        	"'shape':'image','image':'smallfish.png',"+
+                                        	"'border':'0px','border_color':'00ffff'," +
+                                        	"'size':'16px',"+
+                                        	"'lat':'13.41',"+
+                                        	"'long':'52.5140' }  ]";
+						*/
+
+				//return "[ {'color':'a0b0c0', 'transparency':'0.5'," +
+                                //"'shape':'square','border':'0px','border_color':'00ff00'," +
+                                //"'height':'10px','width':'10px','lat':'13.41'," +
+                                //"'long':'52.52' } ]";
+				}
+				else
+				{
+					return "done";
+				}
+			}
+                        else if ( url == "tree_data?name=tree1" )
+                        {
+				return "done";
+                        }
+                        else if ( url == "map_data?name=map1" )
+                        {
+				if ( mdcount==1)
+				{
+					mdcount=2;
+					return "[{'color':'ffff00', 'transparency':'1.0',"+
+                                                "'shape':'image','image':'smallfish.png',"+
+                                                "'border':'0px','border_color':'00ffff'," +
+                                                "'size':'16px',"+
+                                                "'lat':'13.41',"+
+                                                "'long':'52.5140' }]";
+				}
+				else
+				{
+                                	return "done";
+				}
+                        }
+                        else if ( url == "chart_data?name=chart1" )
+                        {
+				return "[ {series:0,y:'12.4'}, {series:0,y:'13.5'},{series:1,y:'12.0'} ]";
+                        }
+			else if ( url.indexOf("user_action?button") == 0 )
+			{
+				if ( (url.indexOf("refresh") > 0) && (chart_inited) )
+				{
+					send_chart_reset = true;
+				}
+				if ( (url.indexOf("refresh") > 0) && (list_inited) )
+				{
+					send_list_reset = true;
+				}
+			}
+			else if ( url == "admin" )
+			{
+				if ( send_chart_reset )
+				{
+					send_chart_reset = false;
+					return "{ component:'chart1', action:'reset' }";
+				}
+				else if ( send_list_reset )
+				{
+					send_list_reset = false;
+					return "{ component:'list2', action:'reset' }";
+				}
+				else
+				{
+					return "wait";
+				}
+			}
+                        else
+                        {
+                                alert("Unknown web service call for url->" + url);
+                                return "";
+                        }
+                }
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<script src="common/highcharts/js/highcharts.js"></script>
+<script src="common/highcharts/js/modules/exporting.js"></script>
+
+</body>
+
+</html>

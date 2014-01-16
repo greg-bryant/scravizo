@@ -1,0 +1,528 @@
+<html>
+<head>
+	<!----------------------->
+	<!-- LOAD JS LIBRARIES -->
+	<!----------------------->
+
+	<!-- STYLE, CSS -->
+        <style type="text/css" title="currentStyle">
+                        @import "common/datatables/datatable.css";
+        </style>
+
+
+	<!-- JQUERY -->
+        <script type="text/javascript" src="common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="common/jquery.jstree.js"></script>
+        <script type="text/javascript" src="common/datatables/jquery.dataTables.js"></script>
+
+	<!-- SVLIST -->
+	<script type="text/javascript" src="svlist/svlist.js"></script>
+
+	<!-- SVGIS -->	
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="svgis/svgis.js"></script>
+
+	<!-- SVTREE -->
+	<script type="text/javascript" src="svtree/svtree.js"></script>
+
+	<!-- SVCHART -->
+	<script type="test/javascript" src="common/highcharts/js/highcharts.js"></script>
+	<script type="test/javascript" src="common/highcharts/js/modules/exporting.js"></script>
+	<script type="text/javascript" src="svchart/svchart.js"></script>
+
+	<!-- SVCONTROL -->
+	<script type="text/javascript" src="svcontrol/svcontrol.js"></script>
+
+	<!-- SVCOMM-->
+	<script type="text/javascript" src="svcomm/svcomm.js"></script>
+	
+	<!-- SVADMIN-->
+	<script type="text/javascript" src="svadmin/svadmin.js"></script>
+	
+	<!-- SVTABLE-->
+	<script type="text/javascript" src="svtable/svtable.js"></script>
+
+	<!-- SVFACTORY-->
+	<script type="text/javascript" src="svfactory/svfactory.js"></script>
+	
+	<!-- INITIALIZE THE SV FACTORY OBJECT-->
+	<script>
+
+		var svfactory = null; // SVFACTORY GLOBAL OBJECT...
+		var cter = 0;
+		var mter = 0;
+		var init_type_count=0;
+		var init_ctl_count=0;
+		var send_chart_reset = -1;
+		var send_chart_delete = -1;
+		var send_list_reset = 0;
+		var list_inited = false;
+		var charts_inited = false;
+		var table_inited = false;
+		var table_row = 0;
+		var rr = 0;
+		var chart_data_count = [ 0,0 ];
+
+		var svcontrols = [
+			 "{ name: 'control1', type:'control', title:'Objects', x:'20', " +
+                                                "y:'20', height:'200', width:'200', " +
+						"buttons: [" +
+                                                "{name:'charts', target_page:'1'}," +
+                                                "{name:'lists', target_page:'2'}," +
+                                                "{name:'maps and trees', target_page:'3'}," +
+                                                "{name:'tables', target_page:'4'}," +
+                                                "{name:'controls', target_page:'5'} ]," +
+						"logo:'on'," +
+                                                "page:'all'}",
+			"{ name: 'control2', type:'control', title:'the default title', x:'250', " +
+                                                "y:'50', height:'200', width:'200', " +
+                                                "buttons:[{name:'run'},{name:'stop'}," +
+                                                "{name:'pause',toggle_name:'resume'}," +
+                                                "{name:'reset'},{name:'restart'},{name:'refresh'},{name:'delete'}]," +
+                                                "drop_down:{name:'dd1','items':[{item:'aa',selected:'yes'},{item:'b'}]}," +
+                                                "text_field: {name:'tf1', label:'submit'}," +
+                                                "radio_buttons:{name:'radio1','items':[{item:'a',selected:'yes'},{item:'b'}]}," +
+						"logo:'off'," +
+						"page:'5'}" 
+				];
+
+		var svlists = [ 
+			"{ name: 'list1', type:'list', x:'250', y:'50', height:'200', width:'200', interval:'1000'," +
+                                                "scroll_or_refresh:'scroll'," +
+                                                "prepend_or_append:'prepend'," +
+                                                "page:'2' }",
+                                                //"font:'sans-serif'," +
+                                                //"font_size:'20px'," +
+                                                //"text_color:'#FFFF00'," +
+                                                //"background_color:'#FFFFFF' }",
+			"{ name: 'list2', type:'list', x:'500', y:'50', height:'200', width:'200', interval:'1000'," +
+                                                "scroll_or_refresh:'scroll'," +
+                                                "prepend_or_append:'prepend'," +
+                                                "page:'2' }"
+                                                //"font:'sans-serif'," +
+                                                //"font_size:'20px'," +
+                                                //"text_color:'#FFFF00',"
+				];
+
+		var svmaps = [ 
+			"{ name: 'map1', type:'map', x:'500', y:'50', height:'300', width:'300', interval:'1000'," +
+                                                "tree: 'tree1'," +
+                                                "top:'52.54', bottom:'52.50', left:'13.39', right:'13.43'," +
+                                                "clear_or_accumulate:'accumulate'," +
+						"gis_or_image:'gis'," +
+                                                "page:'3' }",
+			"{ name: 'map2', type:'map', x:'500', y:'450', height:'300', width:'300', interval:'1000'," +
+						"tree: 'tree2'," +
+                                                "top:'1.0', bottom:'0.0', left:'0.0', right:'1.0'," +
+                                                "clear_or_accumulate:'accumulate'," +
+						"gis_or_image:'image'," +
+						"image:'image.png'," +
+                                                "page:'3' }"
+				];
+
+		var svtrees = [
+			"{ name: 'tree1', type:'tree', x:'240', y:'50', height:'200', width:'200', interval:'1000'," +
+                                                " paths: [ ['yo',[13.39,52.50,13.43,52.54]], " +
+                                                        "['yo','ho',[13.39,52.50,13.41,52.52] ], " +
+                                                        "['yo','ho','a',[13.391,52.50,13.401,52.51] ]," +
+                                                        "['yo','ho','b',[13.392,52.50,13.402,52.51] ]," +
+                                                        "['yo','ho','c',[13.393,52.50,13.403,52.51] ]," +
+                                                        "['yo','ho','d',[13.394,52.50,13.404,52.51] ]," +
+                                                        "['yo','ho','e',[13.395,52.50,13.405,52.51] ]," +
+                                                        "['yo','ho','f',[13.396,52.50,13.406,52.51] ]," +
+                                                        "['yo','ho','g',[13.397,52.50,13.407,52.51] ]," +
+                                                        "['yo','ho','h',[13.398,52.50,13.408,52.51] ]," +
+                                                        "['yo','ho','i',[13.399,52.50,13.409,52.51] ]," +
+                                                        "['yo','ho','j',[13.3991,52.50,13.4091,52.51] ]," +
+                                                        "['yo','ho','k',[13.3992,52.50,13.4092,52.51] ]," +
+                                                        "['yo','ho','l',[13.3993,52.50,13.4093,52.51] ] ]," +
+                                                        "page:'3' }",
+                                                //"font:'sans-serif'," +
+                                                //"font_size:'20px'," +
+                                                //"text_color:'#FFFF00'," +
+                                                //"background_color: '#00FFFF' }",
+			"{ name: 'tree2', type:'tree', x:'240', y:'450', height:'200', width:'200', interval:'1000'," +
+                                                " paths: [ ['yo',[0.0,1.0,0.0,1.0]], " +
+                                                        "['yo','ho',[0.0,0.5,0.0,0.5] ], " +
+                                                        "['yo','ho','a',[0.0,0.25,0.0,0.25] ]," +
+                                                        "['yo','ho','b',[0.1,0.35,0.1,0.35] ]," +
+                                                        "['yo','ho','c',[0.2,0.45,0.2,0.45] ]," +
+                                                        "['yo','ho','d',[0.3,0.55,0.3,0.55] ] ]," +
+                                                        "page:'3' }"
+                                                //"font:'sans-serif'," +
+                                                //"font_size:'20px'," +
+                                                //"text_color:'#FFFF00'," +
+                                                //"background_color: '#00FFFF' }"
+				];
+		
+		var svcharts = [
+			"{ name: 'chart1', type:'chart', title:'Graph-horizontal', " +
+						"subtype:'graph'," +
+                                                "window_points:'10', " +
+                                                "x:'250', y:'20', height:'200', width:'200', interval:'1000', " +
+                                                "points_or_lines_or_area:'area', " +
+                                                "series_name:['one','two'], chart_start:'fill', shift:'no'," +
+                                                "stacking:'no'," +
+						"direction:'horizontal'," +
+                                                "page:'1'," + 
+						"threshold:'13.0' }",
+			"{ name: 'chart2', type:'chart', title:'Graph-vertical', " +
+						"subtype:'graph'," +
+                                                "window_points:'10', " +
+                                                "x:'480', y:'20', height:'200', width:'200', interval:'1000', " +
+                                                "points_or_lines_or_area:'area', " +
+                                                "series_name:['one','two'], chart_start:'fill', shift:'no'," +
+                                                "stacking:'no'," +
+						"direction:'vertical'," +
+                                                "page:'1' }",
+			"{ name: 'chart3', type:'chart', title:'pie', " +
+                                                "subtype:'pie'," +
+                                                "x:'250', y:'300', height:'200', width:'400', interval:'1000', " +
+                                                "series_name:['chrome','firefox','ie' ]," +
+						"page:'1' }",
+			"{ name: 'chart4', type:'chart', title:'bar-vertical', " +
+                                                "subtype:'bar'," +
+                                                "x:'680', y:'300', height:'200', width:'400', interval:'1000', " +
+                                                "categories:['aaa','bbb','ccc','ddd','eee']," +	
+                                                "series_name:['chrome','ie','firefox' ]," +
+						"direction:'vertical'," +
+						"page:'1' }",
+			"{ name: 'chart6', type:'chart', title:'Graph-horizontal-datetime', " +
+                                                "subtype:'graph'," +
+                                                "window_points:'10', " +
+                                                "x:'710', y:'20', height:'200', width:'350', interval:'1000', " +
+                                                "points_or_lines_or_area:'lines', " +
+                                                "series_name:['one','two'], chart_start:'fill', shift:'no'," +
+                                                "stacking:'no'," +
+                                                "direction:'horizontal'," +
+                                                "page:'1'," +
+                                                "threshold:'13.0'," +
+                                                "x_type:'datetime' }"
+			];
+
+		var dynchart = 
+                        "{ name: 'chart5', type:'chart', title:'bar-horizontal', " +
+                                                "subtype:'bar'," +
+                                                "x:'250', y:'550', height:'200', width:'400', interval:'1000', " +
+                                                "categories:['aaa','bbb','ccc','ddd','eee']," +
+                                                "series_name:['chrome','ie','firefox' ]," +
+                                                "direction:'horizontal'," +
+                                                "page:'1' }";
+
+		var svtables = [
+			"{ name: 'table1', type:'table', title:'default title', x:'870', y:'300', height:'300', width:'400'," +
+                                                " interval:'1000'," +
+                                                " font: 'sans-serif', font_size: '10px', text_color: '#FFFFFF', background_color: '#808080', " +
+                                                " editable:'no', plain_alternated_checkered:'plain', " +
+                                                " columns:[{header:'blah', type:'string'},{header:'blah1', type:'dollars'},{header:'blah2', type:'real'}," +
+                                                " {header:'blah3', type:'integer'},{header:'blah', type:'date'}]," +
+                                                "page:'4' }"
+				];
+
+		var all_svcontrols = [ 
+				{ type: 'svcontrols', 	controls: [ svcontrols[0], svcontrols[1] ] },
+				{ type: 'svlist', 	controls: [ svlists[0], svlists[1] ] },
+				{ type: 'svmap', 	controls: [ svmaps[0], svmaps[1] ] },
+				{ type: 'svtree', 	controls: [ svtrees[0], svtrees[1] ] },
+				{ type: 'svchart',	controls: [ svcharts[0], svcharts[1], svcharts[2], svcharts[3], svcharts[4] ] },
+				{ type: 'svtable',	controls: [ svtables[0] ] } ];
+
+		var all_resets = [ 
+			"{ component:'chart1', action:'reset' }",
+			"{ component:'chart2', action:'reset' }",
+			"{ component:'chart3', action:'reset' }",
+			"{ component:'chart4', action:'reset' }" ];
+
+
+		//
+		//	Stuff to do on document load event...
+		//
+                function my_onload()
+                {
+                        svfactory = new SVFactory(  
+						   {
+							'url': null, //'http://localhost:8080',
+							'cb_fake': comm_fake
+                                                   } );
+                        svfactory.Init();
+                }
+
+		//	Generates a random integer...
+		function R()
+		{
+			return Math.round(Math.random()*10);
+		}
+
+		//
+		//	This call will fake a web service endpoint...
+		//
+                function comm_fake( url )
+                {
+                        if ( url == "main_init" )
+                        {
+				return "{ type:'page', title:'PAGE TITLE', start:'1' }";
+                        }
+                        else if ( url == "main_init_next")
+                        {
+				if ( init_type_count < all_svcontrols.length )
+				{
+					var which = all_svcontrols[init_type_count];
+					if ( init_ctl_count <  which['controls'].length )
+					{
+						var init_str = which['controls'][init_ctl_count];
+						init_ctl_count++;
+						return init_str;
+					}
+					else
+					{
+						init_ctl_count=0;
+						init_type_count++;
+						return "wait";
+					}
+				}
+				else
+				{
+					return "done";
+				}
+                        }
+                        else if ( url == "list_data?name=list1" )
+                        {
+				var str = "counter->" + cter;
+				cter++;
+                                return "[ 'its list1','this is the stuff you print out', 'this too', '" + str + "' ]";
+                        }
+                        else if ( url == "list_data?name=list2" )
+                        {
+				var str = "counter->" + cter;
+				cter++;
+                                return "[ 'its list2', 'this is the stuff you print out', 'this too', '" + str + "' ]";
+                        }
+			else if ( url == "tree_data?name=tree1&init=1" )
+			{
+				return "done";
+			}
+			else if ( url == "map_data?name=map1" )
+			{
+				mter++;
+				
+				if ( mter == 1 )
+				{
+					return "[" +
+                                		"{'color':'ff0000', 'transparency':'1.0'," +
+                                        	"'shape':'circle','border':'0px','border_color':'00ff00'," +
+                                        	"'size':'10px'," +
+                                        	"'lat':'13.41'," +
+                                        	"'long':'52.52' }," +
+                                		"{'color':'00ff00', 'transparency':'0.7'," +
+                                        	"'shape':'circle','border':'1px','border_color':'0000ff'," +
+                                        	"'size':'12px'," +
+                                        	"'lat':'13.4160'," +
+                                        	"'long':'52.52' }," +
+                                		"{'color':'0000ff', 'transparency':'0.6'," +
+                                        	"'shape':'square','border':'2px','border_color':'ff0000'," +
+                                        	"'size':'14px',"+
+                                        	"'lat':'13.4220',"+ 
+                                        	"'long':'52.52' },"+ 
+                                		"{'color':'ffff00', 'transparency':'0.4',"+
+                                        	"'shape':'square','border':'3px','border_color':'00ffff',"+
+                                        	"'size':'16px',"+
+                                        	"'lat':'13.4280',"+
+                                        	"'long':'52.52' } ]";
+
+						/*
+                                		"{'color':'ffff00', 'transparency':'1.0',"+
+                                        	"'shape':'image','image':'smallfish.png',"+
+                                        	"'border':'0px','border_color':'00ffff'," +
+                                        	"'size':'16px',"+
+                                        	"'lat':'13.41',"+
+                                        	"'long':'52.5140' }  ]";
+						*/
+				}
+				else if ( mter == 2 )
+				{
+                                        return "[{'color':'ffff00', 'transparency':'1.0',"+
+                                                "'shape':'image','image':'smallfish.png',"+
+                                                "'border':'0px','border_color':'00ffff'," +
+                                                "'size':'16px',"+
+                                                "'lat':'13.41',"+
+                                                "'long':'52.5140' }]";
+                                }
+                                else
+                                {
+                                        return "done";
+                                }
+
+			}
+                        else if ( url == "map_data?name=map2" )
+                        {
+				return "done";
+			}
+                        else if ( url == "tree_data?name=tree1" )
+                        {
+				return "done";
+                        }
+                        else if ( url == "tree_data?name=tree2" )
+                        {
+				return "done";
+                        }
+                        else if ( url == "chart_data?name=chart1" )
+                        {
+				chart_data_count[0] = chart_data_count[0]+1;
+				if ( chart_data_count[0]<5 )
+				{
+					return "[ {series:0,y:'12.4'},{series:0,y:'45.5'},{series:0,y:'12.4'}," +
+						"{series:1,y:'12.0'},{series:1,y:'15.0'},{series:2,y:'17.0'} ]";
+				}
+				else
+				{
+					return "done";
+				}
+                        }
+			else if ( url == "chart_data?name=chart2" )
+                        {
+				chart_data_count[1] = chart_data_count[1]+1;
+				if ( chart_data_count[1]<5 )
+				{
+                                	return "[ {series:0,y:'12.4'}, {series:0,y:'13.5'},{series:1,y:'12.0'},{series:2,y:'15.0'} ]";
+				}
+				else
+				{
+					return "done";
+				}
+                        }
+			else if ( url == "chart_data?name=chart3" )
+                        {
+				if (rr==0)
+				{
+					rr=1;
+					return "[ {series:'chrome',y:'20'}, {series:'firefox',y:'30'}, {series:'ie',y:'50'}  ]";
+				}
+				else if (rr==1)
+				{
+					rr=2;
+					return "[ {series:'chrome',y:'21'}, {series:'firefox',y:'31'}, {series:'ie',y:'48'}  ]";
+				}
+				else if (rr==2)
+				{
+					rr=0;
+					return "[ {series:'chrome',y:'22'}, {series:'firefox',y:'32'}, {series:'ie',y:'46'}  ]";
+				}
+			}
+			else if ( url == "chart_data?name=chart4" )
+                        {
+				return  "[ {name:'chrome'," + 
+						"value:[" + R() + "," + R() + ","+ R() + ","+ R() + ","+ R() + "]}," +
+					"  {name:'ie'," + 
+						"value:[" + R() + "," + R() + ","+ R() + ","+ R() + ","+ R() + "]}," +
+					"  {name:'firefox'," +
+						"value:[" + R() + "," + R() + ","+ R() + ","+ R() + ","+ R() + "]}]";
+                        }
+                        else if ( url == "chart_data?name=chart5" )
+                        {
+				return  "[ {name:'chrome'," + 
+                                                "value:[" + R() + "," + R() + ","+ R() + ","+ R() + ","+ R() + "]}," +
+                                        "  {name:'ie'," + 
+                                                "value:[" + R() + "," + R() + ","+ R() + ","+ R() + ","+ R() + "]}," +
+                                        "  {name:'firefox'," +
+                                                "value:[" + R() + "," + R() + ","+ R() + ","+ R() + ","+ R() + "]}]";
+                        }
+			else if ( url == "chart_data?name=chart6" )
+			{
+				charts_inited = true;
+				return "[ {series:0,x:'198797197970',y:'12.4'}," +
+                                                                 "  {series:0,x:'1987971922270',y:'15.4'}," +
+                                                                 "  {series:1,x:'198797197970',y:'9.4'}," +
+                                                                 "  {series:1,x:'1987971922270',y:'22.0'}  ]";
+			}
+
+                        else if ( url == "table_data?name=table1" )
+                        {
+				if (table_row<12)
+				{
+					var v1 = Math.random();
+					var v2 = Math.random();
+					var v3 = Math.random();
+					var v4 = Math.random();
+                                	var data = "[ {'row':'" + table_row + "','column':'0', value:'" + v1 + "'}, " + 
+                                	" {'row':'" + table_row + "','column':'1', value:'" + v2 + "'}, " + 
+                                	" {'row':'" + table_row + "','column':'2', value:'" + v3 + "'}, " + 
+                                	" {'row':'" + table_row + "','column':'3', value:'" + v4 + "'} ]";
+					table_row++;
+					return data;
+				}
+				else
+				{
+					return "done";
+				}
+                        }
+			else if ( url.indexOf("user_action?type=button") == 0 )
+			{
+				if ( (url.indexOf("refresh") > 0) && (  charts_inited ) )
+				{
+					send_chart_reset = all_resets.length - 1;
+				}
+				if ( (url.indexOf("refresh") > 0) && (list_inited) )
+				{
+					send_list_reset = true;
+				}	
+				if ( (url.indexOf("delete") > 0 ) )
+				{
+					send_chart_delete = 1;
+				}
+			}
+                        else if ( url.indexOf("user_action?dropdown") == 0 )
+                        {
+				alert('dropdown->' + url );
+                        }
+                        else if ( url.indexOf("user_action?radio") == 0 )
+                        {
+				alert('dropdown->' + url );
+                        }
+			else if ( url == "admin" )
+			{
+				if ( send_chart_reset >= 0 )
+				{
+					var str = all_resets[ send_chart_reset ];
+					send_chart_reset--;
+					return str;
+				}
+				else if ( send_list_reset )
+				{
+					send_list_reset = false;
+					return "{ component:'list2', action:'reset' }";
+				}
+				else if ( send_chart_delete > 0 )
+				{
+					send_chart_delete = -1;
+					return "{ component:'chart2', action:'delete' }";
+				}
+				else
+				{
+					return "{ level:'1', report:'3' }";
+				}
+			}
+			else if ( url.indexOf( "error?" ) >=0 )
+			{
+				console.log("COMM_FAKE: ERROR FROM JSLIBRARY->" + url );	
+			}
+                        else
+                        {
+                                alert("Unknown web service call for url->" + url);
+                                return "";
+                        }
+                }
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+<div id="test">blah</div>
+<script src="common/highcharts/js/highcharts.js"></script>
+<script src="common/highcharts/js/modules/exporting.js"></script>
+
+</body>
+
+</html>

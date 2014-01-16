@@ -1,0 +1,182 @@
+
+var _MAPSJS = null;
+
+var _maps_str = {
+			'map1':
+				{ "init":
+					"{ name: 'map1', type:'map', x:'500', y:'50', height:'300', width:'300', interval:'1000'," +
+                                                "tree: 'tree1'," +
+                                                "top:'52.54', bottom:'52.50', left:'13.39', right:'13.43'," +
+                                                "clear_or_accumulate:'accumulate'," +
+                                                "gis_or_image:'gis'," +
+                                                "page:[3] }",
+				  "data": function() {
+					return "[" +
+                                                "{'color':'ff0000', 'transparency':'1.0'," +
+                                                "'shape':'circle','border':'0px','border_color':'00ff00'," +
+                                                "'size':'10px'," +
+                                                "'lat':'13.41'," +
+                                                "'long':'52.52' }," +
+                                                "{'color':'00ff00', 'transparency':'0.7'," +
+                                                "'shape':'circle','border':'1px','border_color':'0000ff'," +
+                                                "'size':'12px'," +
+                                                "'lat':'13.4160'," +
+                                                "'long':'52.52' }," +
+                                                "{'color':'0000ff', 'transparency':'0.6'," +
+                                                "'shape':'square','border':'2px','border_color':'ff0000'," +
+                                                "'size':'14px',"+
+                                                "'lat':'13.4220',"+
+                                                "'long':'52.52' },"+
+                                                "{'color':'ffff00', 'transparency':'0.4',"+
+                                                "'shape':'square','border':'3px','border_color':'00ffff',"+
+                                                "'size':'16px',"+
+                                                "'lat':'13.4280',"+
+		                                "'long':'52.52' } ]";
+							}				     
+				},
+			'map2':
+                        	{ "init": 
+					"{ name: 'map2', type:'map', x:'500', y:'450', height:'300', width:'300', interval:'1000'," +
+                                                "tree: 'tree2'," +
+                                                "top:'1.0', bottom:'0.0', left:'0.0', right:'1.0'," +
+                                                "clear_or_accumulate:'accumulate'," +
+                                                "gis_or_image:'image'," +
+                                                "image:'image.png'," +
+                                                "page:[3] }",
+				  "data": function() {
+					return "wait";
+					// return "[{'color':'ff0000'}]";
+
+						     }
+				}
+			
+			,
+			'map3':
+				{ "init":
+					"{ name: 'map3', type:'map', x:'250', y:'0', height:'600', width:'1000', interval:'1000'," +
+                                                "top:'52.54', bottom:'52.50', left:'13.39', right:'13.43'," +
+                                                "clear_or_accumulate:'accumulate'," +
+                                                "gis_or_image:'map_image'," +
+				                "image:'worldeq.png'," +                 
+                                                "z: '-2', page:[7] }",
+				  "data": function() {
+					return "[" +
+                                                "{'color':'ff0000', 'transparency':'1.0'," +
+                                                "'shape':'circle','border':'0px','border_color':'00ff00'," +
+                                                "'size':'10px'," +
+                                                "'z':'1'," +
+                                                "'lat':'13.41'," +
+                                                "'long':'52.52' }," +
+                                                "{'color':'00ff00', 'transparency':'0.7'," +
+                                                "'shape':'circle','border':'1px','border_color':'0000ff'," +
+                                                "'size':'12px'," +
+                                                "'z':'2'," +
+                                                "'lat':'-123'," +
+                                                "'long':'44' }," +
+                                                "{'color':'0000ff', 'transparency':'0.6'," +
+                                                "'shape':'square','border':'2px','border_color':'ff0000'," +
+                                                "'size':'14px',"+
+                                                "'z':'1'," +
+                                                "'lat':'13.4220',"+
+                                                "'long':'52.52' },"+
+                                                "{'color':'ffff00', 'transparency':'0.4',"+
+                                                "'shape':'square','border':'3px','border_color':'00ffff',"+
+                                                "'size':'16px',"+
+                                                "'z':'1'," +
+                                                "'lat':'-58.3',"+
+		                                "'long':'-34.7' } ," +
+                                                "{'color':'ff0000', 'transparency':'0.7'," +
+                                                "'shape':'circle','border':'1px','border_color':'0000ff'," +
+                                                "'size':'12px'," +
+                                                "'z':'1'," +
+                                                "'lat':'-122.3749'," +
+                                                "'long':'37.619' }," +
+
+					                                           "{'color':'ff0000', 'transparency':'0.6'," +
+					                                           "'shape':'line','border':'0px','border_color':'ff0000'," +
+                                                "'z':'1'," +
+					                                           "'size':'6px'," +
+					                                           "'lat':'-122.3749'," +
+					                                           "'long':'37.619'," +
+					                                           "'lat2':'-87.9047'," +
+					                                           "'long2':'41.9786' }," +
+                                                "{'color':'ff0000', 'transparency':'0.7'," +
+                                                "'shape':'circle','border':'1px','border_color':'0000ff'," +
+                                                "'size':'12px'," +
+                                                "'z':'1'," +
+                                                "'lat':'-87.9047'," +
+                                                "'long':'41.9786' }," +
+
+					                                           "{'color':'ff0000', 'transparency':'0.6'," +
+					                                           "'shape':'line','border':'0px','border_color':'ff0000'," +
+					                                           "'size':'6px'," +
+                                                "'z':'1'," +
+					                                           "'lat':'-87.9047'," +
+					                                           "'long':'41.9786'," +
+					                                           "'lat2':'-122.3094'," +
+					                                           "'long2':'47.4489' }," +
+                                                "{'color':'0000ff', 'transparency':'0.7'," +
+                                                "'shape':'circle','border':'1px','border_color':'0000ff'," +
+                                                "'size':'12px'," +
+                                                "'z':'1'," +
+                                                "'lat':'-122.3094'," +
+                                                "'long':'47.4489' }," +
+					                                           
+					                                           "{'color':'0000ff', 'transparency':'0.6'," +
+					                                           "'shape':'line','border':'0px','border_color':'0000ff'," +
+					                                           "'size':'6px'," +
+                                                "'z':'1'," +
+					                                           "'lat':'-122.3094'," +
+					                                           "'long':'47.4489'," +
+					                                           "'lat2':'-174.8053'," +
+					                                           "'long2':'-41.3272' } ]"
+
+;
+							}				     
+				}
+			        
+			};
+
+var _maps_test_script = [ 
+	[ "init", 'map1', _maps_str['map1']['init'] ],
+	[ "init", 'map2', _maps_str['map2']['init'] ],
+	[ "init", 'map3', _maps_str['map3']['init'] ],
+	[ "data", 'map1', _maps_str['map1']['data'] ],
+	[ "data", 'map2', _maps_str['map2']['data'] ],
+	[ "data", 'map3', _maps_str['map3']['data'] ],
+	[ "data", 'map1', function() { return "done"; } ],
+	[ "data", 'map2', function() { return "done"; } ]
+	,[ "data", 'map3', function() { return "done"; } ]
+			];
+
+var _maps_test_idx = 0;
+
+function _maps_peek_next_test()
+{
+	if ( _maps_test_idx == _maps_test_script.length )
+		return false;
+	else
+		return _maps_test_script[ _maps_test_idx ];
+}
+
+function _maps_get_next_test()
+{
+	if ( _maps_test_idx == _maps_test_script.length )
+		return false;
+	else
+	{
+		var val = _maps_test_script[ _maps_test_idx ];
+		_maps_test_idx++;
+		return val;
+	}	
+}
+
+var _maps_test = {
+	'peek' : _maps_peek_next_test,
+	'next' : _maps_get_next_test
+		   };
+
+function maps_script_init( )
+{
+	SOURCES[ SOURCES.length ] = _maps_test;
+}

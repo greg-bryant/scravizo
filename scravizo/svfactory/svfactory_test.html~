@@ -1,0 +1,147 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+
+	<!-- JQUERY -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="../common/jquery.jstree.js"></script>
+	<!-- SVLIST -->
+	<script type="text/javascript" src="../svlist/svlist.js"></script>
+	<!-- SVGIS -->	
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="../svgis/svgis.js"></script>
+	<!-- SVTREE -->
+	<script type="text/javascript" src="../svtree/svtree.js"></script>
+	<!-- SVCHART -->
+	<script type="test/javascript" src="../common/highcharts/js/highcharts.js"></script>
+	<script type="test/javascript" src="../common/highcharts/js/modules/exporting.js"></script>
+	<script type="text/javascript" src="../svchart/svchart.js"></script>
+	<!-- SVCOMM-->
+	<script type="text/javascript" src="../svcomm/svcomm.js"></script>
+	<!-- SVFACTORY-->
+	<script type="text/javascript" src="svfactory.js"></script>
+	
+	<!-- INITIALIZE THE SV OBJECT-->
+	<script>
+
+		var svfactory = null; // SVFACTORY GLOBAL OBJECT...
+
+		//
+		//	Stuff to do on document load event...
+		//
+                function my_onload()
+                {
+                        svfactory = new SVFactory( {    'url': null, //'http://localhost:8080'  ,
+                                                        'cb_fake': comm_fake
+                                                   } );
+                        svfactory.Init();
+                }
+
+		//
+		//	This call will fake a web service endpoint...
+		//
+		var cter = 0;
+		var mter = 0;
+
+                function comm_fake( url )
+                {
+                        if ( url == "main_init" )
+                        {
+                                init_count = 1;
+				return "{ name: 'list2', type:'list', x:'20', y:'20', height:'200', width:'200', interval:'1000' }";
+                        }
+                        else if ( url == "main_init_next")
+                        {
+                                init_count++;
+                                if (init_count==2)
+				{
+					return "{ name: 'list1', type:'list', x:'320', y:'20', height:'200', width:'200', interval:'1000'  }";
+				}
+				else if (init_count==3)
+				{
+					return "{ name: 'map1', type:'map', x:'300', y:'250', height:'300', width:'300', interval:'1000'," +
+						"top:'52.54', bottom:'52.50', left:'13.39', right:'13.43' }";
+				}
+				else if (init_count==4)
+				{
+        				return "{ name: 'tree1', type:'tree', x:'40', y:'250', height:'200', width:'200', interval:'1000'," +
+						" paths: [ ['yo',[52.54,52.50,13.39,13.43]], " + 
+							"['yo','ho',[52.54,52.50,13.39,13.43]], " +
+							"['yo','ho','lo',[52.54,52.50,13.39,13.43]], " + 
+							"['yo','ho','no',[52.54,52.50,13.39,13.43]]] }";
+				}
+				else if (init_count==5)
+				{
+        				return "{ name: 'chart1', type:'chart', title:'My Title', " + 
+						"window_points:'3', x:'500', y:'20', height:'200', width:'400', interval:'1000', " +
+						"num_series:'2', left_or_fill:'fill', scroll_or_accumulate:'scroll'}";
+				}
+                                else
+				{
+                                        return "done";
+				}
+                        }
+                        else if ( url == "list_data?name=list1" )
+                        {
+				var str = "counter->" + cter;
+				cter++;
+                                return "[ 'its list1','this is the stuff you print out', 'this too', '" + str + "' ]";
+                        }
+                        else if ( url == "list_data?name=list2" )
+                        {
+				var str = "counter->" + cter;
+				cter++;
+                                return "[ 'its list2', 'this is the stuff you print out', 'this too', '" + str + "' ]";
+                        }
+			else if ( url == "tree_data?name=tree1&init=1" )
+			{
+				return "done";
+			}
+			else if ( url == "map_data?name=map1&init=1" )
+			{
+				mter++;
+				if ( mter == 1 )
+				{
+					return "[ {'color':'a0b0c0', 'transparency':'0.5'," +
+                                		"'shape':'square','border':'0px','border_color':'00ff00'," +
+                                		"'height':'10px','width':'10px','lat':'13.41'," +
+                                		"'long':'52.52' } ]";
+				}
+				else
+				{
+					return "done";
+				}
+			}
+                        else if ( url == "tree_data?name=tree1" )
+                        {
+				return "done";
+                        }
+                        else if ( url == "map_data?name=map1" )
+                        {
+                                return "done";
+                        }
+                        else if ( url == "chart_data?name=chart1" )
+                        {
+				return "[ {series:0,y:'12.4'}, {series:0,y:'13.5'},{series:1,y:'12.0'}  ]";
+                        }
+                        else
+                        {
+                                alert("Unknown web service call for url->" + url);
+                                return "";
+                        }
+                }
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<script src="../common/highcharts/js/highcharts.js"></script>
+<script src="../common/highcharts/js/modules/exporting.js"></script>
+
+</body>
+
+</html>

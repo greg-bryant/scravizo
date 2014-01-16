@@ -1,0 +1,44 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="../common/jquery.jstree.js"></script>
+	<script type="text/javascript" src="svadmin.js"></script>
+
+	<!-- INITIALIZE THE SVADMIN OBJECT-->
+	<script>
+
+		var svadmin = null; // SVLIST GLOBAL OBJECT...
+
+
+		function cb_admin( inst, obj )
+		{
+			alert(inst + ' ' + obj);
+		}
+
+		function my_onload()
+		{
+			var obj = 'hello!';
+
+			svadmin = new SVAdmin( {
+						'cb_admin': cb_admin,
+						'cb_obj': obj
+					     } );
+			svadmin.Init();
+		}
+
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<div id='basicList'>
+</div>
+
+</body>
+
+</html>

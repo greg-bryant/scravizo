@@ -1,0 +1,96 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="../common/jquery.jstree.js"></script>
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="svgis.js"></script>
+
+	<!-- INITIALIZE THE SVGIS OBJECT-->
+	<script>
+
+		var svgis = null; // SVLIST GLOBAL OBJECT...
+
+		function my_onload()
+		{
+			svgis = new SVGis( {
+						'init_bounds': [ 13.39, 52.50, 13.43, 52.54 ],
+						'div_map':'basicMap',
+						'canvas_overlay':'mapOverlay',
+					    } );
+
+			var markers = [ 
+				{'color':'ff0000', 'transparency':'1.0', 
+					'shape':'circle','border':'0px','border_color':'00ff00',
+					'size':'10px',
+					'lat':'13.41', 
+					'long':'52.52' }, 
+				{'color':'00ff00', 'transparency':'0.7', 
+					'shape':'circle','border':'1px','border_color':'0000ff',
+					'size':'12px',
+					'lat':'13.4160', 
+					'long':'52.52' }, 
+				{'color':'0000ff', 'transparency':'0.6', 
+					'shape':'square','border':'2px','border_color':'ff0000',
+					'size':'14px',
+					'lat':'13.4220', 
+					'long':'52.52' }, 
+				{'color':'ffff00', 'transparency':'0.4', 
+					'shape':'square','border':'3px','border_color':'00ffff',
+					'size':'16px',
+					'lat':'13.4280', 
+					'long':'52.52' },
+				{'color':'ffff00', 'transparency':'1.0', 
+					'shape':'image','image':'smallfish.png',
+					'border':'0px','border_color':'00ffff',
+					'size':'16px',
+					'lat':'13.41', 
+					'long':'52.5140' }  ];
+			
+			svgis.AddMarkers(  markers, true );
+		}
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<style type="text/css">
+
+        #basicMap {
+                position: absolute;
+                width: 300px;
+                height: 300px;
+                left: 200px;
+                top: 200px;
+                margin: 0;
+                background-color:transparent;
+		border-radius: 15px;
+                   }
+
+	#mapOverlay {
+		position: absolute;
+		width: 300px;
+		height: 300px;
+		left: 200px;
+		top: 200px;
+		margin: 0;
+		background-color:transparent;
+		z-index:2;
+		pointer-events:none;
+		}
+
+</style>
+
+<div id='basicTree'></div>
+
+<div id='basicMap'></div>
+
+<canvas id="mapOverlay" width="300" height="300"></canvas>
+
+</body>
+
+</html>

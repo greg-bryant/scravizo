@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>svtable example</title>
+
+                <style type="text/css" title="currentStyle">
+                        @import "../common/datatables/datatable.css";
+                </style>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../common/datatables/jquery.dataTables.js"></script>
+        	<script type="text/javascript" src="svtable.js"></script>
+
+		<script type="text/javascript">
+
+		var svtable = null;
+		var counter = 0;
+		
+		function _timeout()
+		{
+                        svtable.AddData( [ {'row': counter, 'column':0, 'value':Math.random() },
+                        			{'row': counter, 'column':1, 'value':Math.floor(1000*Math.random()) },
+                        			{'row': counter, 'column':2, 'value':Math.random() },
+                        			{'row': counter, 'column':3, 'value':Math.random().toString(36).substring(7) } ] );
+			counter++;
+		}
+
+		function docload()
+		{
+			svtable = new SVTable( { 'div_table':'basicTable', 
+					     	'title':'Its A Table!',
+						'columns':[ {'header':'a','type':'string'}, 
+							    {'header':'b','type':'string'}, 
+							    {'header':'c','type':'string'}, 
+							    {'header':'d','type':'string'} ] } );
+			setInterval( _timeout, 3000 );
+		}
+
+		</script>
+
+
+	</head>
+	<body onload='docload();' >
+
+	<div id="basicTable" style="position:absolute;background-color:yellow; left:0px; top:0px; width: 700px; height: 200px; margin: 0 auto"></div>
+	<div id="basicRef" style="position:absolute;background-color:red; left: 750px; top: 0px; width: 50px; height: 200px; margin: 0 auto"></div>
+
+	</body>
+</html>

@@ -1,0 +1,67 @@
+<html>
+<head>
+	<!-- LOAD JS LIBRARIES -->
+        <script type="text/javascript" src="../common/_lib/jquery.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.cookie.js"></script>
+        <script type="text/javascript" src="../common/_lib/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="../common/jquery.jstree.js"></script>
+	<script type="text/javascript" src="svcontrol.js"></script>
+
+	<!-- INITIALIZE THE SVLIST OBJECT-->
+	<script>
+
+		var svcontrol = null; // SVLIST GLOBAL OBJECT...
+
+		function my_click(obj,txt)
+		{
+			alert('click ' + obj + ' ' + txt);
+		}
+
+		function my_select(obj,txt)
+		{
+			alert('select ' + obj + ' ' + txt);
+		}
+
+		function my_onload()
+		{
+			svcontrol = new SVControl( {
+						'div_control':'basicControl', 
+						"buttons":[{name:'run'},{name:'stop'}, 
+                                                  {name:'pause',toggle_name:'resume'}, 
+                                                  {name:'reset'},{name:'restart'},{name:'refresh'} ],
+						'drop_down':{'items':[{item:'aa',selected:'yes'},{item:'b'}]},
+						'text_field': {name:'name', editable:'yes'}, 
+						'radio_buttons':{'items':[{item:'a',selected:'yes'},{item:'b'}]},
+						'logo': 'ggvizjs.png',
+						'click': my_click,
+						'cb_obj': 'object!',
+						'select':my_select
+					     } );
+			svcontrol.Init();
+		}
+
+
+	</script>
+
+</head>
+
+<body onload="my_onload();" >
+
+<style type="text/css">
+	#basicControl {
+		position: absolute;
+		width: 500px;
+		height: 200px;
+		left: 100px;
+		top: 100px;
+		margin: 0;
+		background-color:green;
+                   }
+</style>
+
+<div id='basicControl'>
+</div>
+
+</body>
+
+</html>

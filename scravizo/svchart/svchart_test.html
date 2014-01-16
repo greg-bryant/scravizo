@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="test/javascript" src="../common/highcharts/js/highcharts.js"></script>
+        	<script type="test/javascript" src="../common/highcharts/js/modules/exporting.js"></script>
+        	<script type="text/javascript" src="svchart.js"></script>
+
+		<script type="text/javascript">
+
+		var svchart = null;
+		
+		function _timeout()
+		{
+			svchart.Reset();
+                        svchart.AddPoints( [ {series:0,y:'5.5'}, {series:0,y:'5.7'}, {series:1,y:'6.5'} ] );
+
+		}
+
+		function docload()
+		{
+			svchart = new SVChart( { 'div_chart':'basicChart', 
+					     	'title':'Its A Chart!',
+						'series_name':[ 'one', 'two'] } )
+			svchart.AddPoints( [ {series:0,y:'5.5'}, {series:0,y:'5.7'}, {series:1,y:'6.5'} ] );
+			svchart.AddPoints( [ {series:0,y:'5.5'}, {series:0,y:'5.7'}, {series:1,y:'6.5'} ] );
+
+			setTimeout( _timeout, 5000 );
+		}
+
+		</script>
+
+
+	</head>
+	<body onload='docload();' >
+
+	<script src="../common/highcharts/js/highcharts.js"></script>
+	<script src="../common/highcharts/js/modules/exporting.js"></script>
+
+	<div id="basicChart" style="background-color:yellow; width: 400px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>
