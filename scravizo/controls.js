@@ -13,7 +13,6 @@ var _controls_str = {
                                                 "{name:'image equirectangular map', target_page:7}," +
                                                 "{name:'tables', target_page:4}," +
                                                 "{name:'controls', target_page:5}," +
-                                                "{name:'gants', target_page:6} ]," +
 				                "button_width:'150px'," +
                                                 "logo:'on'," +
                                                 "z: 1, page:'all'}"
