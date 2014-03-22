@@ -67,7 +67,7 @@
 		var maps_loaded = true;
 		var trees_loaded = true;
 		var tables_loaded = false;
-		var gantts_loaded = false;
+		var gantts_loaded = true;
 		
 		var body_loaded = false;
 
@@ -323,6 +323,7 @@
                                         return datastr;
                                 }
                         }
+/*
 			else if ( url.indexOf("gantt_data") >= 0 )
                         {
                                 TEST_INFO("got gantt data request->" + url );
@@ -339,6 +340,7 @@
                                         return datastr;
                                 }
                         }
+*/
 			else if ( url.indexOf("user_action") >= 0 )
 			{
 				alert( url );
@@ -356,7 +358,7 @@
 		importJS( "maps.js", "_MAPSJS", function() { maps_loaded = true; maps_script_init(); init(); } );
 		importJS( "trees.js", "_TREESJS", function() { trees_loaded = true; trees_script_init(); init(); } );
 		importJS( "tables.js", "_TABLESJS", function() { tables_loaded = true; tables_script_init(); init(); } );
-		importJS( "gantts.js", "_GANTTSJS", function() { gantts_loaded = true; gantts_script_init(); init(); } );
+		// importJS( "gantts.js", "_GANTTSJS", function() { gantts_loaded = true; gantts_script_init(); init(); } );
 
 
 	 </script>
@@ -368,7 +370,7 @@
 <script src="common/highcharts/js/highcharts.js"></script>
 <script src="common/highcharts/js/modules/exporting.js"></script>
 
-<script src="common/gantt/js/jquery.fn.gantt.js"></script>
+<!--script src="common/gantt/js/jquery.fn.gantt.js"></script-->
 
 </body>
 
