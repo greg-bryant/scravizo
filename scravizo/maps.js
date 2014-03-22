@@ -4,7 +4,7 @@ var _MAPSJS = null;
 var _maps_str = {
 			'map1':
 				{ "init":
-					"{ name: 'map1', type:'map', x:'500', y:'50', height:'300', width:'300', interval:'1000'," +
+					"{ name: 'map1', type:'map', x:'500', y:'30', height:'300', width:'300', interval:'1000'," +
                                                 "tree: 'tree1'," +
                                                 "top:'52.54', bottom:'52.50', left:'13.39', right:'13.43'," +
                                                 "clear_or_accumulate:'accumulate'," +
@@ -36,7 +36,7 @@ var _maps_str = {
 				},
 			'map2':
                         	{ "init": 
-					"{ name: 'map2', type:'map', x:'500', y:'450', height:'300', width:'300', interval:'1000'," +
+					"{ name: 'map2', type:'map', x:'500', y:'350', height:'300', width:'300', interval:'1000'," +
                                                 "tree: 'tree2'," +
                                                 "top:'1.0', bottom:'0.0', left:'0.0', right:'1.0'," +
                                                 "clear_or_accumulate:'accumulate'," +

@@ -4,7 +4,7 @@ var _TREESJS = null;
 var _trees_str = {
 			'tree1':
 				{ "init":
-					"{ name: 'tree1', type:'tree', x:'240', y:'50', height:'200', width:'200', interval:'1000'," +
+					"{ name: 'tree1', type:'tree', x:'240', y:'30', height:'200', width:'200', interval:'1000'," +
                                                 " paths: [ ['yo',[13.39,52.50,13.43,52.54]], " +
                                                         "['yo','ho',[13.39,52.50,13.41,52.52] ], " +
                                                         "['yo','ho','a',[13.391,52.50,13.401,52.51] ]," +
@@ -30,7 +30,7 @@ var _trees_str = {
 				},
 			'tree2':
                         	{ "init": 
-					"{ name: 'tree2', type:'tree', x:'240', y:'450', height:'200', width:'200', interval:'1000'," +
+					"{ name: 'tree2', type:'tree', x:'240', y:'350', height:'200', width:'200', interval:'1000'," +
                                                 " paths: [ ['yo',[0.0,1.0,0.0,1.0]], " +
                                                         "['yo','ho',[0.0,0.5,0.0,0.5] ], " +
                                                         "['yo','ho','a',[0.0,0.25,0.0,0.25] ]," +
