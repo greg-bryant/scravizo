@@ -12,7 +12,7 @@ var _tables_str = {
                                                 " editable:'no', plain_alternated_checkered:'plain', " +
                                                 " columns:[{header:'blah', type:'string'},{header:'blah1', type:'dollars'},{header:'blah2', type:'real'}," +
                                                 " {header:'blah3', type:'integer'},{header:'blah', type:'date'}]," +
-                                                "page:[4] }",
+                                                "z: 1, page:[4] }",
 				  "data": function() {
 					var v1 = Math.random();
                                         var v2 = Math.random();

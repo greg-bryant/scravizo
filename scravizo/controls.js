@@ -9,10 +9,10 @@ var _controls_str = {
                                                 "buttons: [" +
                                                 "{name:'charts', target_page:1}," +
                                                 "{name:'lists', target_page:2}," +
-                                                "{name:'maps and trees', target_page:3}," +
+                                                "{name:'maps with trees', target_page:3}," +
                                                 "{name:'image equirectangular map', target_page:7}," +
                                                 "{name:'tables', target_page:4}," +
-                                                "{name:'controls', target_page:5}," +
+                                                "{name:'controls', target_page:5}]," +
 				                "button_width:'150px'," +
                                                 "logo:'on'," +
                                                 "z: 1, page:'all'}"
