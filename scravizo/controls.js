@@ -28,14 +28,14 @@ var _controls_str = {
                                                 "text_field: {name:'tf1', label:'submit', default:'a default'}," +
                                                 "radio_buttons:{name:'radio1','items':[{item:'a',selected:'yes'},{item:'b'}]}," +
                                                 "logo:'off'," +
-                                                "page:[5]}"
+                                                "z: 1, page:[5]}"
 				},
                         'control3':
                                 { "init": "{ name: 'control3', type:'control', title:'the default title', x:'450', " +
                                                 "y:'350', height:'200', width:'200', " +
                                                 "text_field: {name:'tf2', label:'submit', default:'a control default'}," +
                                                 "logo:'off'," +
-                                                "page:[5]}"
+                                                "z: 1, page:[5]}"
                                 }
 			};
 
