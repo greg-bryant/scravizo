@@ -392,7 +392,7 @@ function _make_btn(inst, parent, name, title, cb_obj, toggle, target, value, but
 function _make_img(parent, path, width)
 {
         //      create buttons as needed...
-        var img = document.createElement('image');
+        var img = document.createElement('img');
 
         img.src = path;
 	img.width = Number(width);
